@@ -15,7 +15,7 @@ Transport complex JavaScript objects from the server to the web browser at light
 - Output is the code for a JavaScript expression that, when evaluated, will return the deserialized object
 - Extremely fast serialization and deserialization
 - 100% test coverage
-- Benchmarks
+- [Benchmarks](#is-it-fast)
 
 # Installation
 
