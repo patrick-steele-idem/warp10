@@ -1,0 +1,29 @@
+{
+  "name": "warp10",
+  "version": "1.0.0",
+  "description": "Transport complex JavaScript objects from the server to the web browser at lightning fast speeds",
+  "main": "src/index.js",
+  "keywords": ["JSON", "circular", "reference", "recursive", "recursion", "parse", "stringify", "eval"],
+  "scripts": {
+    "test": "mocha test/ && npm run jshint",
+    "benchmark": "matcha benchmark/benchmark.js",
+    "test-coverage": "istanbul cover _mocha -- --ui bdd --reporter spec ./test/ && npm run jshint",
+    "jshint": "jshint src/",
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
+  },
+  "author": "Patrick Steele-Idem <pnidem@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "circular-json": "^0.3.0",
+    "coveralls": "^2.11.11",
+    "escodegen": "^1.8.0",
+    "istanbul": "^0.4.4",
+    "js-beautify": "^1.6.3",
+    "jshint": "^2.9.2",
+    "lave": "^1.1.10",
+    "matcha": "^0.7.0",
+    "mocha": "^2.5.3",
+    "refify": "^1.0.0"
+  }
+}
