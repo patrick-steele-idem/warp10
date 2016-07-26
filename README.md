@@ -14,7 +14,7 @@ Transport complex JavaScript objects from the server to the web browser at light
 - `Date` values are correctly serialized and deserialized
 - Output is the code for a JavaScript expression that, when evaluated, will return the deserialized object
 - Extremely fast serialization and deserialization
-- 100% test coverage
+- [100% test coverage](https://coveralls.io/github/patrick-steele-idem/warp10?branch=master)
 - [Benchmarks](#is-it-fast)
 
 # Installation
