@@ -96,11 +96,30 @@ class Helpers {
         this.compare(actual, suffix);
         //    fs.writeFileSync(storeSerializedFile, actual, { encoding: 'utf8' });
 
+
+        //////////////////
+        var jsonSuffix = '-generated-json.js';
+        var expectedJsonFile = path.join(this.dir, 'expected' + jsonSuffix);
+        fs.writeFileSync(expectedJsonFile, expected, {
+            encoding: 'utf8'
+        });
+
+        var json = this.warp10.stringify(obj, options);
+        var jsonFile = path.join(this.dir, 'actual.json');
+        fs.writeFileSync(jsonFile, this.prettyPrint(json), {
+            encoding: 'utf8'
+        });
+
+        var parsed = this.warp10.parse(json);
+        var actualJSONParsed = safeStringify(parsed);
+
+        this.compare(actualJSONParsed, jsonSuffix);
+
         return browserObj;
     }
 }
 
-describe('lasso-babel-transform', function() {
+describe('warp10', function() {
     require('./util/autotest').scanDir(
         path.join(__dirname, 'tests'),
         function(info, done) {

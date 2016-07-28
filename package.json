@@ -3,7 +3,16 @@
   "version": "1.0.0",
   "description": "Transport complex JavaScript objects from the server to the web browser at lightning fast speeds",
   "main": "src/index.js",
-  "keywords": ["JSON", "circular", "reference", "recursive", "recursion", "parse", "stringify", "eval"],
+  "keywords": [
+    "JSON",
+    "circular",
+    "reference",
+    "recursive",
+    "recursion",
+    "parse",
+    "stringify",
+    "eval"
+  ],
   "scripts": {
     "test": "mocha test/ && npm run jshint",
     "benchmark": "matcha benchmark/benchmark.js",
@@ -25,5 +34,28 @@
     "matcha": "^0.7.0",
     "mocha": "^2.5.3",
     "refify": "^1.0.0"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "chai": "^3.5.0",
+    "circular-json": "^0.3.0",
+    "coveralls": "^2.11.11",
+    "escodegen": "^1.8.0",
+    "js-beautify": "^1.6.3",
+    "jshint": "^2.9.2",
+    "istanbul": "^0.4.4",
+    "lave": "^1.1.10",
+    "matcha": "^0.7.0",
+    "refify": "^1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patrick-steele-idem/warp10.git"
+  },
+  "bugs": {
+    "url": "https://github.com/patrick-steele-idem/warp10/issues"
+  },
+  "homepage": "https://github.com/patrick-steele-idem/warp10#readme"
 }

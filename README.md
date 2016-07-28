@@ -25,6 +25,10 @@ npm install warp10 --save
 
 # Usage
 
+With `warp10` you can choose to serialize an object to either a JSON string or JavaScript deserialization code. Generating JavaScript deserialization code is typically faster than producing JSON code and the JavaScript deserialization code will typically allow the object to parse much more quickly. In addition, no library code is needed to parse an object when outputting JavaScript deserialization code since only the JavaScript code needs to be evaluated by the JavaScript runtime.
+
+## Outputting JavaScript code
+
 ```javascript
 var warp10 = require('warp10');
 
@@ -46,7 +50,7 @@ This will produce code similar to the following:
 
 ```javascript
 window.foo = {
-  hello: 'world'
+  "hello": "world"
 }
 ```
 
@@ -73,9 +77,33 @@ You can also `eval` the `deserializationCode`:
 console.log('DESERIALIZED:', eval(deserializationCode));
 ```
 
+## JSON stringify/parse
+
+If outputting JavaScript code is not an option or not desired then you can use the `stringify` and `parse` methods provided by `warp10`.
+
+```javascript
+var warp10 = require('warp10');
+
+var json = warp10.stringify(object[, options]); // Returns a String
+```
+
+Supported options:
+
+- `safe` - If `true` then the ending `</script>` tags will be escaped. (optional, default: `false`)
+
+The JSON can then be parsed using code similar to the following:
+
+```javascript
+var parse = require('warp10/parse');
+
+var object = parse(json);
+```
+
 # Examples
 
-## Simple
+## Serialize examples
+
+### Simple
 
 ```javascript
 warp10.serialize({ name: 'Frank' });
@@ -89,7 +117,7 @@ Output (formatted for readability):
 })
 ```
 
-## Simple types
+### Simple types
 
 ```javascript
 warp10.serialize({
@@ -122,7 +150,7 @@ Output (formatted for readability):
 }())
 ```
 
-## Global variable
+### Global variable
 
 ```javascript
 warp10.serialize({ name: 'Frank' }, { var: 'person' });
@@ -136,7 +164,7 @@ window.person = {
 }
 ```
 
-## Global variable with additive
+### Global variable with additive
 
 ```javascript
 var deserializationCodeA = warp10.serialize({
@@ -191,7 +219,7 @@ Final value of the `window.myStore` global:
 }
 ```
 
-## Circular dependency
+### Circular dependency
 
 ```javascript
 var parent = {
@@ -220,7 +248,7 @@ Output (formatted for readability):
 }())
 ```
 
-## De-duping
+### De-duping
 
 ```javascript
 var child = {
@@ -263,7 +291,7 @@ Output (formatted for readability):
 }())
 ```
 
-## Circular dependency plus de-duping
+### Circular dependency plus de-duping
 
 ```javascript
 var warp10 = require('warp10');
@@ -333,6 +361,80 @@ The value of `deserializationCode` will be similar to the following (formatted f
 }())
 ```
 
+## Stringify examples
+
+### Simple
+
+```javascript
+warp10.stringify({ name: 'Frank' });
+```
+
+Output (formatted for readability):
+
+```javascript
+{
+  "object": {
+    "name": "Frank"
+  }
+}
+```
+
+### Circular dependency
+
+```javascript
+var parent = {
+    name: 'parent'
+};
+
+var child = {
+    parent: parent
+};
+
+parent.child = child;
+
+warp10.serialize(parent);
+```
+
+Output (formatted for readability):
+
+```javascript
+{
+  "object": {
+    "mother": {
+      "name": "Jane",
+      "age": 30,
+      "children": [{
+        "name": "Sue",
+        "age": 5,
+        "father": {
+          "name": "Frank",
+          "age": 32
+        }
+      }, {
+        "name": "Henry",
+        "age": 10
+      }]
+    }
+  },
+  "assignments": [{
+    "l": ["mother", "children", 0, "mother"],
+    "r": ["mother"]
+  }, {
+    "l": ["mother", "children", 0, "father", "children"],
+    "r": ["mother", "children"]
+  }, {
+    "l": ["mother", "children", 1, "mother"],
+    "r": ["mother"]
+  }, {
+    "l": ["mother", "children", 1, "father"],
+    "r": ["mother", "children", 0, "father"]
+  }, {
+    "l": ["father"],
+    "r": ["mother", "children", 0, "father"]
+  }]
+}
+```
+
 # Is it fast?
 
 Yes, this library is optimized for both fast serialization and deserialization. This library was built on top of the native `JSON.stringify` method for optimal performance. This library includes [benchmarks](./benchmarks) that you can run locally:
@@ -346,63 +448,72 @@ Below is the output for one run of the benchmarks:
 
 ```text
                       circular
-         300,922 op/s » circular-json
-             546 op/s » lave
-         669,566 op/s » refify
-         838,022 op/s » warp10
+         284,357 op/s » circular-json
+             521 op/s » lave
+         654,493 op/s » refify
+         519,239 op/s » warp10-stringify
+         820,863 op/s » warp10
 
                       circular-dedupe
-          50,796 op/s » circular-json
-             524 op/s » lave
-          47,521 op/s » refify
-         198,100 op/s » warp10
+          49,070 op/s » circular-json
+             505 op/s » lave
+          46,396 op/s » refify
+         113,071 op/s » warp10-stringify
+         177,930 op/s » warp10
 
                       dedupe
-         112,793 op/s » circular-json
-             579 op/s » lave
-         313,136 op/s » refify
-         499,719 op/s » warp10
+         104,117 op/s » circular-json
+             558 op/s » lave
+         334,314 op/s » refify
+         343,625 op/s » warp10-stringify
+         478,872 op/s » warp10
 
                       deserialize-circular-dedupe
-          31,543 op/s » circular-json
-          26,875 op/s » refify
-       1,081,134 op/s » warp10
+          32,124 op/s » circular-json
+          25,247 op/s » refify
+          82,770 op/s » warp10-parse
+       1,052,371 op/s » warp10
 
                       deserialize-simple-large
-           2,568 op/s » circular-json
-          24,597 op/s » parse-native
-           1,990 op/s » refify
-         151,658 op/s » warp10
+           2,551 op/s » circular-json
+          24,051 op/s » parse-native
+           1,918 op/s » refify
+          24,497 op/s » warp10-parse
+         149,809 op/s » warp10
 
                       simple-large
-           3,214 op/s » circular-json
-           2,053 op/s » json3
-             285 op/s » lave
-           2,592 op/s » refify
-          31,773 op/s » stringify-native
-          11,217 op/s » warp10
+           3,150 op/s » circular-json
+           2,076 op/s » json3
+             283 op/s » lave
+           2,504 op/s » refify
+          31,057 op/s » stringify-native
+          11,174 op/s » warp10-stringify
+          11,161 op/s » warp10
 
                       simple-large-b
              124 op/s » circular-json
-             123 op/s » json3
-              28 op/s » lave
-             160 op/s » refify
-           2,251 op/s » stringify-native
-           1,483 op/s » warp10
+             117 op/s » json3
+              26 op/s » lave
+             156 op/s » refify
+           2,263 op/s » stringify-native
+           1,505 op/s » warp10-stringify
+           1,461 op/s » warp10
 
                       simple-small
-         171,852 op/s » circular-json
-         108,224 op/s » json3
-             653 op/s » lave
-         276,234 op/s » refify
-       1,160,510 op/s » stringify-native
-         709,009 op/s » warp10
+         164,080 op/s » circular-json
+         105,782 op/s » json3
+             635 op/s » lave
+         259,742 op/s » refify
+       1,121,181 op/s » stringify-native
+         555,886 op/s » warp10-stringify
+         686,304 op/s » warp10
 
                       test-a
-         198,462 op/s » circular-json
-             590 op/s » lave
-          97,183 op/s » refify
-         414,673 op/s » warp10
+         190,557 op/s » circular-json
+             554 op/s » lave
+          90,753 op/s » refify
+         219,099 op/s » warp10-stringify
+         381,360 op/s » warp10
 ```
 
 Test setup:
