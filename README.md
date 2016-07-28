@@ -539,7 +539,7 @@ This special property is largely private and only discoverable at runtime via `O
 
 # Why?
 
-This library was originally created to support serializing potentially complex UI component state down to the browser for the [Marko Widgets](https://github.com/marko-js/marko-widgets) UI components library. This allows the web browser to pickup exactly where the server left off when utilizing server-side rendering of a web page. Marko Widgets is optimized for speed and it is important to minimize the CPU usage of both the server and the web browser to reduce page load times. This library can be used to transport a complex JavaScript graph from one JavaScript runtime to another JavaScript runtime.
+This library can be used to transport a complex JavaScript graph from one JavaScript runtime to another JavaScript runtime. This library was originally created to support serializing potentially complex UI component state down to the browser for the [Marko Widgets](https://github.com/marko-js/marko-widgets) UI components library. This allows the web browser to pickup exactly where the server left off when utilizing server-side rendering of a web page. Marko Widgets is optimized for speed and it is important to minimize the CPU usage of both the server and the web browser to reduce page load times (accompanied by a reduced payload size through de-duping of data).
 
 # Similar projects
 
