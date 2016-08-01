@@ -99,6 +99,25 @@ var parse = require('warp10/parse');
 var object = parse(json);
 ```
 
+## JSON stringifyPrepare/finalize
+
+The `stringifyPrepare` function can be used to produce a JavaScript object that is safe to serialize using the native `JSON.stringify` method. The `finalize` method should be called on the parsed object to produce the final object with duplicate objects and circular dependencies intact.
+
+_On the server:_
+
+```javascript
+var warp10 = require('warp10').stringifyPrepare;
+var object = stringifyPrepare(object); // Returns an Object
+var json = JSON.stringify(object);
+```
+
+_In the browser:_
+
+```javascript
+var finalize = require('warp10/finalize');
+var clone = finalize(JSON.parse(json));
+```
+
 # Examples
 
 ## Serialize examples
