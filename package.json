@@ -38,18 +38,6 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {
-    "chai": "^3.5.0",
-    "circular-json": "^0.3.0",
-    "coveralls": "^2.11.11",
-    "escodegen": "^1.8.0",
-    "js-beautify": "^1.6.3",
-    "jshint": "^2.9.2",
-    "istanbul": "^0.4.4",
-    "lave": "^1.1.10",
-    "matcha": "^0.7.0",
-    "refify": "^1.0.0"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/patrick-steele-idem/warp10.git"
