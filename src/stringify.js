@@ -3,10 +3,6 @@ const stringifyPrepare = require('./stringifyPrepare');
 const escapeEndingScriptTagRegExp = /<\//g;
 
 module.exports = function stringify(obj, options) {
-    if (obj == null) {
-        return '{}';
-    }
-
     var safe;
 
     if (options) {

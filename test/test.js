@@ -17,6 +17,10 @@ class Helpers {
     }
 
     prettyPrint(code) {
+        if (code === undefined) {
+            return 'undefined';
+        }
+
         return beautify(code, {
             indent_size: 2
         });
@@ -105,6 +109,7 @@ class Helpers {
         });
 
         var json = this.warp10.stringify(obj, options);
+
         var jsonFile = path.join(this.dir, 'actual.json');
         fs.writeFileSync(jsonFile, this.prettyPrint(json), {
             encoding: 'utf8'

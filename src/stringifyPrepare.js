@@ -90,8 +90,8 @@ function pruneObject(obj, path, serializationSymbol, assignments) {
 }
 
 module.exports = function stringifyPrepare(obj) {
-    if (obj == null) {
-        return {};
+    if (!obj) {
+        return obj;
     }
 
     /**
@@ -122,13 +122,12 @@ module.exports = function stringifyPrepare(obj) {
         pruned = obj;
     }
 
-    var final = {
-        object: pruned
-    };
-
     if (assignments.length) {
-        final.assignments = assignments;
+        return {
+            o: pruned,
+            $$: assignments
+        };
+    } else {
+        return pruned;
     }
-
-    return final;
 };
