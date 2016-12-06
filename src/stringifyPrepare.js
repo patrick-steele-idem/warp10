@@ -74,15 +74,17 @@ function pruneObject(obj, path, serializationSymbol, assignments) {
     var clone = {};
 
     for (var key in obj) {
-        var value = obj[key];
-        if (value == null) {
-            continue;
-        }
+        if (obj.hasOwnProperty(key)) {
+            var value = obj[key];
+            if (value == null) {
+                continue;
+            }
 
-        if (value && typeof value === 'object') {
-            handleProperty(clone, key, value, append(path, key), serializationSymbol, assignments);
-        } else {
-            clone[key] = value;
+            if (value && typeof value === 'object') {
+                handleProperty(clone, key, value, append(path, key), serializationSymbol, assignments);
+            } else {
+                clone[key] = value;
+            }
         }
     }
 
