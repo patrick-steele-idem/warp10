@@ -25,9 +25,10 @@ module.exports = function finalize(outer) {
     var assignments = outer.$$;
     if (assignments) {
         var object = outer.o;
+        var len;
 
-        if (assignments) {
-            for (var i=0, len=assignments.length; i<len; i++) {
+        if (assignments && (len=assignments.length)) {
+            for (var i=0; i<len; i++) {
                 var assignment = assignments[i];
 
                 var rhs = assignment.r;
@@ -43,13 +44,16 @@ module.exports = function finalize(outer) {
                 var lhsLast = lhs.length-1;
 
                 if (lhsLast === -1) {
-                    return rhsValue;
+                    object = outer.o = rhsValue;
+                    break;
                 } else {
                     var lhsParent = resolve(object, lhs, lhsLast);
                     lhsParent[lhs[lhsLast]] = rhsValue;
                 }
             }
         }
+
+        assignments.length = 0; // Assignments have been applied, do not reapply
 
         return object == null ? null : object;
     } else {
