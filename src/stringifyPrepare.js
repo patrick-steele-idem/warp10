@@ -76,7 +76,7 @@ function pruneObject(obj, path, serializationSymbol, assignments) {
     for (var key in obj) {
         if (obj.hasOwnProperty(key)) {
             var value = obj[key];
-            if (value == null) {
+            if (value === undefined) {
                 continue;
             }
 
