@@ -73,6 +73,13 @@ function pruneArray(array, path, serializationSymbol, assignments) {
 function pruneObject(obj, path, serializationSymbol, assignments) {
     var clone = {};
 
+    if (obj.toJSON && obj.constructor != Date) {
+        obj = obj.toJSON();
+        if (!obj.hasOwnProperty || typeof obj !== 'object') {
+            return obj;
+        }
+    }
+
     for (var key in obj) {
         if (obj.hasOwnProperty(key)) {
             var value = obj[key];
@@ -107,6 +114,12 @@ module.exports = function stringifyPrepare(obj) {
     const assignments = []; // Used to keep track of code that needs to run to fix up the stringified object
 
     if (typeof obj === 'object') {
+        if (obj.toJSON && obj.constructor != Date) {
+            obj = obj.toJSON();
+            if (!obj.hasOwnProperty || typeof obj !== 'object') {
+                return obj;
+            }
+        }
         const serializationSymbol = Symbol(); // Used to detect if the marker is associated with _this_ serialization
         const path = [];
 
