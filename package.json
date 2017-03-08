@@ -1,6 +1,6 @@
 {
   "name": "warp10",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Transport complex JavaScript objects from the server to the web browser at lightning fast speeds",
   "main": "src/index.js",
   "keywords": [
