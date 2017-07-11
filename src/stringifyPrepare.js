@@ -75,23 +75,28 @@ function pruneObject(obj, path, serializationSymbol, assignments) {
 
     if (obj.toJSON && obj.constructor != Date) {
         obj = obj.toJSON();
-        if (!obj.hasOwnProperty || typeof obj !== 'object') {
-            return obj;
-        }
     }
 
-    for (var key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            var value = obj[key];
-            if (value === undefined) {
-                continue;
-            }
+    if (typeof obj !== 'object') {
+        return obj;
+    }
 
-            if (value && typeof value === 'object') {
-                handleProperty(clone, key, value, append(path, key), serializationSymbol, assignments);
-            } else {
-                clone[key] = value;
-            }
+    // `Object.keys(...)` with standard for loop is faster than `for in` in v8
+    var keys = Object.keys(obj);
+    var len = keys.length;
+
+    for (var i = 0; i < len; i++) {
+        var key = keys[i];
+        var value = obj[key];
+
+        if (value === undefined) {
+            continue;
+        }
+
+        if (value && typeof value === 'object') {
+            handleProperty(clone, key, value, append(path, key), serializationSymbol, assignments);
+        } else {
+            clone[key] = value;
         }
     }
 
