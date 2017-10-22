@@ -7,4 +7,5 @@
 *.orig
 .DS_Store
 coverage
+yarn.lock
 ~*
