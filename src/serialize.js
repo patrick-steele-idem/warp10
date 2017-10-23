@@ -2,9 +2,22 @@
 
 const markerKey = Symbol('warp10');
 const safePropName = /^[$A-Z_][0-9A-Z_$]*$/i;
-const escapeEndingScriptTagRegExp = /<\//g;
-const lineAndParagraphSeparatorRegExp = /\u2028|\u2029/g;
 const isArray = Array.isArray;
+const safeJSONRegExp = /<\/|\u2028|\u2029/g;
+
+function safeJSONReplacer(match) {
+    if (match === '<\/') {
+        return '\\u003C/';
+    } else {
+        // No string in JavaScript can contain a literal U+2028 (Line separator) or a U+2029 (Paragraph separator)
+        // more info: http://timelessrepo.com/json-isnt-a-javascript-subset
+        return '\\u' + match.charCodeAt(0).toString(16);
+    }
+}
+
+function safeJSON(json) {
+    return json.replace(safeJSONRegExp, safeJSONReplacer);
+}
 
 class Marker {
     constructor(path, symbol) {
@@ -108,14 +121,8 @@ function serializeHelper(obj, safe, varName, additive) {
 
     let json = JSON.stringify(pruned);
     if (safe) {
-        json = json.replace(escapeEndingScriptTagRegExp, '\\u003C/');
+        json = safeJSON(json);
     }
-
-    // No string in JavaScript can contain a literal U+2028 (Line separator) or a U+2029 (Paragraph separator)
-    // more info: http://timelessrepo.com/json-isnt-a-javascript-subset
-    json = json.replace(lineAndParagraphSeparatorRegExp, function (match) {
-      return '\\u' + match.charCodeAt(0).toString(16);
-    });
 
     if (varName) {
         if (additive) {
