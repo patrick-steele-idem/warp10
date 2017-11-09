@@ -20,10 +20,10 @@ exports.scanDir = function(autoTestDir, run, options) {
 
                 var dir = path.join(autoTestDir, name);
 
-                itFunc(`[${name}] `, function(done) {
-                    run({
+                itFunc(`[${name}] `, function() {
+                    return run({
                         dir: dir
-                    }, done);
+                    });
                 });
             });
     });

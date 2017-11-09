@@ -1,3 +1,1 @@
-module.exports = function(helpers) {
-    helpers.browserVerify(['a', null, undefined, { hello: 'world' }]);
-};
+exports.data = ['a', null, undefined, { hello: 'world' }];

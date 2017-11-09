@@ -1,0 +1,111 @@
+{
+    "o": {
+        "mother": {
+            "name": "Jane",
+            "age": 30,
+            "children": [
+                {
+                    "name": "Sue",
+                    "age": 5,
+                    "father": {
+                        "name": "Frank",
+                        "age": 32,
+                        "children": [
+                            null,
+                            {
+                                "name": "Henry",
+                                "age": 10
+                            }
+                        ]
+                    }
+                },
+                null
+            ]
+        }
+    },
+    "$$": [
+        {
+            "l": [
+                "mother",
+                "children",
+                0,
+                "mother"
+            ],
+            "r": [
+                "mother"
+            ]
+        },
+        {
+            "l": [
+                "mother",
+                "children",
+                0,
+                "father",
+                "children",
+                0
+            ],
+            "r": [
+                "mother",
+                "children",
+                0
+            ]
+        },
+        {
+            "l": [
+                "mother",
+                "children",
+                0,
+                "father",
+                "children",
+                1,
+                "mother"
+            ],
+            "r": [
+                "mother"
+            ]
+        },
+        {
+            "l": [
+                "mother",
+                "children",
+                0,
+                "father",
+                "children",
+                1,
+                "father"
+            ],
+            "r": [
+                "mother",
+                "children",
+                0,
+                "father"
+            ]
+        },
+        {
+            "l": [
+                "mother",
+                "children",
+                1
+            ],
+            "r": [
+                "mother",
+                "children",
+                0,
+                "father",
+                "children",
+                1
+            ]
+        },
+        {
+            "l": [
+                "father"
+            ],
+            "r": [
+                "mother",
+                "children",
+                0,
+                "father"
+            ]
+        }
+    ]
+}

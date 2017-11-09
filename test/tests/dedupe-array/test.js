@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 
-module.exports = function(helpers) {
+exports.data = function() {
     var mother = {
         name: 'Jane'
     };
@@ -20,11 +20,13 @@ module.exports = function(helpers) {
     mother.children = [child1, child2];
     father.children = [child1, child2];
 
-    var browserObj = helpers.browserVerify({
+    return {
         mother: mother,
         father: father
-    }, {var: 'family'});
+    };
+};
 
-    expect(browserObj.mother.children[0]).to.equal(browserObj.father.children[0]);
-    expect(browserObj.mother.children[1]).to.equal(browserObj.father.children[1]);
+exports.verify = function(deserialized) {
+    expect(deserialized.mother.children[0]).to.equal(deserialized.father.children[0]);
+    expect(deserialized.mother.children[1]).to.equal(deserialized.father.children[1]);
 };

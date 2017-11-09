@@ -1,4 +1,4 @@
-module.exports = function(helpers) {
+exports.data = function() {
     var child = {
         name: 'Henry'
     };
@@ -13,8 +13,8 @@ module.exports = function(helpers) {
         child: child
     };
 
-    helpers.browserVerify({
+    return {
         mother: mother,
         father: father
-    });
+    };
 };

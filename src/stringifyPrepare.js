@@ -75,37 +75,34 @@ function pruneObject(obj, path, serializationSymbol, assignments) {
 
     if (obj.toJSON && obj.constructor != Date) {
         obj = obj.toJSON();
-    }
-
-    if (typeof obj !== 'object') {
-        return obj;
-    }
-
-    // `Object.keys(...)` with standard for loop is faster than `for in` in v8
-    var keys = Object.keys(obj);
-    var len = keys.length;
-
-    for (var i = 0; i < len; i++) {
-        var key = keys[i];
-        var value = obj[key];
-
-        if (value === undefined) {
-            continue;
+        if (!obj.hasOwnProperty || typeof obj !== 'object') {
+            return obj;
         }
+    }
 
-        if (value && typeof value === 'object') {
-            handleProperty(clone, key, value, append(path, key), serializationSymbol, assignments);
-        } else {
-            clone[key] = value;
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            var value = obj[key];
+            if (value === undefined) {
+                continue;
+            }
+
+            if (value && typeof value === 'object') {
+                handleProperty(clone, key, value, append(path, key), serializationSymbol, assignments);
+            } else {
+                clone[key] = value;
+            }
         }
     }
 
     return clone;
 }
 
+const PROMISE_NULL = Promise.resolve(null);
+
 module.exports = function stringifyPrepare(obj) {
-    if (!obj) {
-        return obj;
+    if (obj == null) {
+        return PROMISE_NULL;
     }
 
     /**
@@ -119,10 +116,10 @@ module.exports = function stringifyPrepare(obj) {
     const assignments = []; // Used to keep track of code that needs to run to fix up the stringified object
 
     if (typeof obj === 'object') {
-        if (obj.toJSON && obj.constructor != Date) {
+        if (obj.toJSON && obj.constructor !== Date) {
             obj = obj.toJSON();
             if (!obj.hasOwnProperty || typeof obj !== 'object') {
-                return obj;
+                return Promise.resolve(obj);
             }
         }
         const serializationSymbol = Symbol(); // Used to detect if the marker is associated with _this_ serialization
@@ -142,12 +139,16 @@ module.exports = function stringifyPrepare(obj) {
         pruned = obj;
     }
 
+    let result;
+
     if (assignments.length) {
-        return {
+        result = {
             o: pruned,
             $$: assignments
         };
     } else {
-        return pruned;
+        result = pruned;
     }
+
+    return Promise.resolve(result);
 };

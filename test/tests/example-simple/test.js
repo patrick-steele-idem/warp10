@@ -1,3 +1,1 @@
-module.exports = function(helpers) {
-    helpers.browserVerify({ name: 'Frank' });
-};
+exports.data = { name: 'Frank' };

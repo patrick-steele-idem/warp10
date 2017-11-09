@@ -1,0 +1,24 @@
+{
+    "o": {
+        "grandParent": {
+            "name": "grand parent",
+            "child": {
+                "name": "parent",
+                "child": {}
+            }
+        }
+    },
+    "$$": [
+        {
+            "l": [
+                "grandParent",
+                "child",
+                "child",
+                "grandParent"
+            ],
+            "r": [
+                "grandParent"
+            ]
+        }
+    ]
+}

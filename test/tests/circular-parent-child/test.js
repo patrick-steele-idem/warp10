@@ -1,6 +1,4 @@
-var expect = require('chai').expect;
-
-module.exports = function(helpers) {
+exports.data = function() {
     var parent = {
         name: 'parent'
     };
@@ -11,10 +9,7 @@ module.exports = function(helpers) {
 
     parent.child = child;
 
-    var obj = {
+    return {
         parent: parent
     };
-
-    helpers.browserVerify(obj);
-    helpers.browserVerify(obj);
 };

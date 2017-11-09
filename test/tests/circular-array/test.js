@@ -1,8 +1,8 @@
-module.exports = function(helpers) {
+exports.data = function() {
     var parent = [];
     parent[0] = parent;
 
-    helpers.browserVerify({
+    return {
         parent: parent
-    }, {var: 'family'});
+    };
 };

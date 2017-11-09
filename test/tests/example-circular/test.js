@@ -1,4 +1,4 @@
-module.exports = function(helpers) {
+exports.data = function() {
     var parent = {
         name: 'parent'
     };
@@ -9,5 +9,5 @@ module.exports = function(helpers) {
 
     parent.child = child;
 
-    helpers.browserVerify(parent);
+    return parent;
 };

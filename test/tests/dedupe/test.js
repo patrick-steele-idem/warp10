@@ -1,4 +1,6 @@
-module.exports = function(helpers) {
+let expect = require('chai').expect;
+
+exports.data = function() {
     var frank = {
         name: 'Henry'
     };
@@ -13,8 +15,13 @@ module.exports = function(helpers) {
         child: frank
     };
 
-    helpers.browserVerify({
+    return {
         mother: mother,
         father: father
-    }, {var: 'family'});
+    };
+};
+
+
+exports.verify = function(deserialized) {
+    expect(deserialized.mother.child).to.equal(deserialized.father.child);
 };

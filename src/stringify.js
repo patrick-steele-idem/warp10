@@ -1,22 +1,28 @@
 'use strict';
 const stringifyPrepare = require('./stringifyPrepare');
-const escapeEndingScriptTagRegExp = /<\//g;
+
+var safeJSONRegExp = /<\/|\u2028|\u2029/g;
+
+
+function safeJSONReplacer(match) {
+    if (match === '<\/') {
+        return '\\u003C/';
+    } else {
+        return '\\u' + match.charCodeAt(0).toString(16);
+    }
+}
+
+function safeJSON(json) {
+    return json.replace(safeJSONRegExp, safeJSONReplacer);
+}
 
 module.exports = function stringify(obj, options) {
-    var safe;
-
-    if (options) {
-        safe = options.safe === true;
-    } else {
-        safe = false;
-    }
-
-    var final = stringifyPrepare(obj);
-
-    let json = JSON.stringify(final);
-    if (safe) {
-        json = json.replace(escapeEndingScriptTagRegExp, '\\u003C/');
-    }
-
-    return json;
+    return stringifyPrepare(obj)
+        .then(function(final) {
+            let json = JSON.stringify(final);
+            if (!options || options.safe === true) {
+                json = safeJSON(json);
+            }
+            return json;
+        });
 };

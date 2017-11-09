@@ -1,4 +1,4 @@
-module.exports = function(helpers) {
+exports.data = function() {
     var grandParent = {
         name: 'grand parent'
     };
@@ -15,7 +15,7 @@ module.exports = function(helpers) {
     grandParent.child = parent;
     parent.child = child;
 
-    helpers.browserVerify({
+    return {
         grandParent: grandParent
-    }, 'family');
+    };
 };

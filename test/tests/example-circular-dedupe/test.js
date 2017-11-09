@@ -1,4 +1,4 @@
-module.exports = function(helpers) {
+exports.data = function() {
     var mother = {
         name: 'Jane',
         age: 30
@@ -26,8 +26,8 @@ module.exports = function(helpers) {
     mother.children = [child1, child2];
     father.children = [child1 /* duplicate */, child2 /* duplicate */];
 
-    helpers.browserVerify({
+    return {
         mother: mother,
         father: father
-    });
+    };
 };
