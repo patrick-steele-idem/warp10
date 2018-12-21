@@ -1,4 +1,5 @@
 'use strict';
+const constants = require("./constants");
 const markerKey = Symbol('warp10');
 const isArray = Array.isArray;
 
@@ -27,7 +28,9 @@ class Assignment {
 }
 
 function handleProperty(clone, key, value, valuePath, serializationSymbol, assignments) {
-    if (value.constructor === Date) {
+    if (value === constants.NOOP) {
+        assignments.push(new Assignment(valuePath, { type: 'NOOP' }));
+    } else if (value.constructor === Date) {
         assignments.push(new Assignment(valuePath, { type: 'Date', value: value.getTime() }));
     } else if (isArray(value)) {
         const marker = value[markerKey];
@@ -60,7 +63,7 @@ function pruneArray(array, path, serializationSymbol, assignments) {
             continue;
         }
 
-        if (value && typeof value === 'object') {
+        if (value && (value === constants.NOOP || typeof value === 'object')) {
             handleProperty(clone, i, value, append(path, i), serializationSymbol, assignments);
         } else {
             clone[i] = value;
@@ -93,7 +96,7 @@ function pruneObject(obj, path, serializationSymbol, assignments) {
             continue;
         }
 
-        if (value && typeof value === 'object') {
+        if (value && (value === constants.NOOP || typeof value === 'object')) {
             handleProperty(clone, key, value, append(path, key), serializationSymbol, assignments);
         } else {
             clone[key] = value;

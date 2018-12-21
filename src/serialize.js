@@ -1,5 +1,6 @@
 'use strict';
 
+const constants = require("./constants");
 const markerKey = Symbol('warp10');
 const safePropName = /^[$A-Z_][0-9A-Z_$]*$/i;
 const isArray = Array.isArray;
@@ -27,7 +28,14 @@ class Marker {
 }
 
 function handleProperty(clone, key, value, valuePath, serializationSymbol, assignments) {
-    if (value.constructor === Date) {
+    if (value === constants.NOOP) {
+        if (assignments.$W10NOOP) {
+            assignments.push(valuePath + '=window.$W10NOOP');
+        } else {
+            assignments.$W10NOOP = true;
+            assignments.push(valuePath + '=window.$W10NOOP=window.$W10NOOP||function(){}');
+        }
+    } else if (value.constructor === Date) {
         assignments.push(valuePath + '=new Date(' + value.getTime() + ')');
     } else if (isArray(value)) {
         const marker = value[markerKey];
@@ -60,7 +68,7 @@ function pruneArray(array, path, serializationSymbol, assignments) {
             continue;
         }
 
-        if (value && typeof value === 'object') {
+        if (value && (value === constants.NOOP || typeof value === 'object')) {
             let valuePath = path + '[' + i + ']';
             handleProperty(clone, i, value, valuePath, serializationSymbol, assignments);
         } else {
@@ -80,7 +88,7 @@ function pruneObject(obj, path, serializationSymbol, assignments) {
             continue;
         }
 
-        if (value && typeof value === 'object') {
+        if (value && (value === constants.NOOP || typeof value === 'object' )) {
             let valuePath = path + (safePropName.test(key) ? '.' + key : '[' + JSON.stringify(key) + ']');
             handleProperty(clone, key, value, valuePath, serializationSymbol, assignments);
         } else {

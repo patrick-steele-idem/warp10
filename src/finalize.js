@@ -1,3 +1,4 @@
+var constants = require("./constants");
 var isArray = Array.isArray;
 
 function resolve(object, path, len) {
@@ -12,6 +13,8 @@ function resolve(object, path, len) {
 function resolveType(info) {
     if (info.type === 'Date') {
         return new Date(info.value);
+    } else if (info.type === 'NOOP') {
+        return constants.NOOP;
     } else {
         throw new Error('Bad type');
     }

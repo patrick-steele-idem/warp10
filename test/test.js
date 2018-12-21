@@ -88,12 +88,10 @@ class Helpers {
         });
 
         var browserObj;
+        var window = browserObj = browserLoad(deserializationCode);
 
         if (varName) {
-            var window = browserLoad(deserializationCode);
             browserObj = window[varName];
-        } else {
-            browserObj = eval(deserializationCode);
         }
 
         var actual = safeStringify(browserObj);
